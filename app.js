@@ -30,6 +30,7 @@ function startNewGame() {
     document.querySelector('.player-2-frame').classList.remove('active');
     document.querySelector('.player-1-frame').classList.add('active');
 
+    // Récupération des noms de joueurs
     player1.innerText = Name1.value;
     player2.innerText = Name2.value;
 }
@@ -48,3 +49,72 @@ startMenuOk.onclick = () => {
 
 //initialisation du jeu 
 startNewGame();
+
+//Le bouton Roll
+
+document.querySelector('.btn-roll').addEventListener('click', function() {
+    if (playGame) {
+        // Numéro aléatoire entre 1 et 6
+        var dice = Math.floor(Math.random() * 6) + 1;
+
+        // Résultat
+        var diceResult = document.querySelector('.dice');
+        diceResult.style.display = 'block';
+        diceResult.src = '/images/dice-' + dice + '.png';
+
+
+        // MAJ du score du round si le dé n'est pas 1
+        if (dice !== 1) {
+            //Ajout du score
+            roundScore += dice;
+            document.querySelector('#current-' + activePlayer).textContent = roundScore;
+        } else {
+            //Joueur suivant
+            nextPlayer();
+        }
+    }
+});
+
+// Le bouton hold
+
+document.querySelector('.btn-hold').addEventListener('click', function() {
+    if (playGame) {
+        // Ajout du score courant au global
+        scores[activePlayer] += roundScore;
+
+        document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+
+        // requête pour savoir si le joueur est vainqueur
+        if (scores[activePlayer] >= 100) {
+            document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+            document.querySelector('.dice').style.display = 'none';
+            document.querySelector('.player-' + activePlayer + '-frame').classList.add('winner');
+            document.querySelector('.player-' + activePlayer + '-frame').classList.remove('active');
+            playGame = false;
+        } else {
+            //Joueur suivant
+            nextPlayer();
+        }
+    }
+});
+
+//Fonction joueur suivant
+
+function nextPlayer() {
+
+    if (activePlayer === 1) {
+        activePlayer = 2;
+
+    } else {
+        activePlayer = 1;
+    }
+
+    roundScore = 0;
+
+    document.getElementById('current-1').textContent = '0';
+    document.getElementById('current-2').textContent = '0';
+
+    document.querySelector('.player-1-frame').classList.toggle('active');
+    document.querySelector('.player-2-frame').classList.toggle('active');
+    document.querySelector('.dice').style.display = 'none';
+}
