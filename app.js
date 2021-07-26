@@ -7,7 +7,6 @@ let player2 = document.getElementById('name-2');
 let Name1 = document.getElementById("Player1-name");
 let Name2 = document.getElementById("Player2-name");
 
-
 document.querySelector('.btn-new').addEventListener('click', newGame);
 
 //Initialisation du jeu avec valeurs remises à 0
@@ -60,7 +59,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         // Résultat
         var diceResult = document.querySelector('.dice');
         diceResult.style.display = 'block';
-        diceResult.src = '/images/dice-' + dice + '.png';
+        diceResult.src = 'images/dice-' + dice + '.png';
 
 
         // MAJ du score du round si le dé n'est pas 1
@@ -70,6 +69,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
         } else {
             //Joueur suivant
+            alert('Passe ton tour !')
             nextPlayer();
         }
     }
@@ -80,12 +80,12 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 document.querySelector('.btn-hold').addEventListener('click', function() {
     if (playGame) {
         // Ajout du score courant au global
-        scores[activePlayer] += roundScore;
+        scores[activePlayer - 1] += roundScore;
 
-        document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+        document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer - 1];
 
         // requête pour savoir si le joueur est vainqueur
-        if (scores[activePlayer] >= 100) {
+        if (scores[activePlayer - 1] >= 100) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             document.querySelector('.dice').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-frame').classList.add('winner');
@@ -108,7 +108,6 @@ function nextPlayer() {
     } else {
         activePlayer = 1;
     }
-
     roundScore = 0;
 
     document.getElementById('current-1').textContent = '0';
@@ -116,5 +115,4 @@ function nextPlayer() {
 
     document.querySelector('.player-1-frame').classList.toggle('active');
     document.querySelector('.player-2-frame').classList.toggle('active');
-    document.querySelector('.dice').style.display = 'none';
 }
